@@ -1,6 +1,7 @@
 const db = require("../model");
 const Tutorial =  db.tutorials;
 const Op = db.Sequelize.Op;
+require('multer');
 
 exports.create = (req, res) => {
     // Validate request
@@ -140,5 +141,7 @@ exports.findAllPublished = (req, res) => {
             err.message || "Some error occurred while retrieving tutorials."
         });
     });
+
+
   
 };

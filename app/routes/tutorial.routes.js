@@ -1,5 +1,15 @@
+
+
+
+
+
 module.exports = app => {
+    const {upload} = require("../middlewares/imageupload");
     const tutorials = require("../controllers/tutorial.controller");
+    const {token} =require('../middlewares/auth.js');
+    const { passport } = require("../middlewares/password");
+    //const task =  require('../controllers/con');
+    //const multer=require('multer');
     var router =require("express").Router();
     //create a new Tutorial
     router.post("/", tutorials.create);
@@ -10,11 +20,39 @@ module.exports = app => {
     //Retrieve a single Tutorial with id
     router.get("/:id", tutorials.findOne);
     //Upadte a Tutorial with id
-    router.put("/:id",tutorials.update);
+    router.put("/:id",tutorials.update); 
     //Delete a Tutorial with id 
     router.delete("/:id",tutorials.delete);
     //Delete all Tutorials
     router.delete("/", tutorials.deleteAll);
+    // router.post("/single", task.diskstorage);
+
+
+
+    router.post('/profile-upload-single', upload.array('profile-file',12), function (req, res, next) {
+    // req.file is the `profile-file` file
+    // req.body will hold the text fields, if there were any
+    console.log(JSON.stringify(req.file))
+    var response = '<a href="/">Home</a><br>'
+    response += "Files uploaded successfully.<br>"
+    response += `<img src="${req.file.path}" /><br>`
+    return res.send(response)
+  })
+
+  router.post("/user" ,(req,res)=>{
+   res.send(token);
+  });
+
+  router.post("/blank",passport.authenticate('local'),(req,res)=>{
+    res.send(req.user.username);
+  })
+
+
     app.use('/api/tutorials',router);
+   
 
 };
+ // router.put("/1", (req, res, next) => {
+    //     console.log(hello);
+    //     next();
+    //   }),(req,res)=>{return res.send({a:1})};
